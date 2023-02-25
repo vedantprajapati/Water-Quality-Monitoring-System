@@ -9,7 +9,13 @@ r = argv(){4}
 g = argv(){5}
 b = argv(){6}
 
-system(sprintf("sendcom color.set.rgb=""%d,%d,%d""",r,g,b))
-system(sprintf("sendcom draw.polygon=""4,0.5,0.0"""))
+system(sprintf("sendcom color.set.rgb=""%s,%s,%s""",r,g,b))
+system(sprintf("sendcom brush.move.to=""0,18,12"""))
+
+% system("sendcom color.set.rgb=""0,255,0""")
+% system(sprintf("sendcom draw.polygon=""4,10,45"""))
+system(sprintf("sendcom draw.path=[0,-4,0],[8,-4,0],[8,1,0],[0,1,0],[0,-4,0]"));
+
 system("sendcom color.set.rgb=""255,255,255""")
-system(sprintf("sendcom draw.text=""Temp: %s, Turb: %s, DS: %s""",temperature,turbidity,dissolved_solids))
+
+system(sprintf("sendcom draw.text=""\n Temp: %s \n \n Turb: %s \n DS: %s""",temperature,turbidity,dissolved_solids))
