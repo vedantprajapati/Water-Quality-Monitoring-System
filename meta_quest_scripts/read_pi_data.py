@@ -1,6 +1,6 @@
 import serial
 from datetime import datetime
-import numpy as np
+import math
 import time
 
 # ser = serial.Serial(
@@ -11,7 +11,7 @@ import time
 def calculate_temperature_rating(temperature):
     # Calculate a rating for the temperature of the water
     # The rating is a number from 0 to 100 representing the quality of the water with 100 being the best
-    return 100 * np.exp(-1 * ((temperature - 25) ** 2) / 100)
+    return 100 * math.exp(-1 * ((temperature - 25) ** 2) / 100)
 
 
 def calculate_turbidity_rating(turbidity):
