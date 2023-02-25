@@ -18,8 +18,17 @@ def main():
         #[{"time":"", "temperature": 0,"turbidity": 0, "dissolved solids": 0}}]
         #sorted by most recent first
         last_5_readings = rpd.read_pi_data()
-        average_readings = {key: sum([reading[key] for reading in last_5_readings])/5 for key in last_5_readings[0].keys()}
+        average_readings = {key: sum([reading[key] for reading in last_5_readings])/5 for key in ["temperature", "turbidity", "dissolved solids"]}
+        
+        rgb = [0,0,0]
+        for i in range(5):
+            for j, elem in enumerate(last_5_readings[i]["colour"]):
+                rgb[j] += int(elem)
+        rgb = [elem/5 for elem in rgb]     
+           
+        average_readings["colour"] = rgb
         average_readings["time"] = last_5_readings[0]["time"]
+        print(average_readings)
         
         #call bash script to draw square with color based on average_readings in octave underneath the user's feet
         if 5 - (time.time() - start_time) > 0:
