@@ -23,3 +23,25 @@ def timeit(func):
             print(f'Function {func.__name__}{args} {kwargs} Took {total_time:.4f} seconds')
         return result
     return timeit_wrapper
+
+def setup_parser(parser):
+    parser.add_argument(
+        "--test",
+        help="test the script without reading from the arduino",
+        action="store_true",
+    )
+    parser.add_argument(
+        "--live",
+        help="draw the square in octave",
+        action="store_true",
+    )
+    parser.add_argument(
+        "--vo",
+        help="draw a visualization of the data in octave",
+        action="store_true",
+    )
+    parser.add_argument(
+        "--vm",
+        help="draw a visualization of the data in matplotlib",
+        action="store_true",
+    )
