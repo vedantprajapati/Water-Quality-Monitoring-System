@@ -11,7 +11,7 @@ def calculate_temperature_rating(temperature):
     Returns:
         float: The temperature rating, from 0 to 100.
     """
-    return 20 * math.exp(-1 * ((temperature - 25) ** 2) / 100)
+    return min(abs(20 * math.exp(-1 * ((temperature - 25) ** 2) / 100)),20)
 
 
 def calculate_turbidity_rating(turbidity):
@@ -29,7 +29,7 @@ def calculate_turbidity_rating(turbidity):
     """
     if turbidity < 0:
         return 0
-    return turbidity / 0.5 * 40
+    return min(abs(turbidity / 0.5 * 40), 40)
 
 
 def calculate_dissolved_solids_rating(dissolved_solids):
@@ -47,7 +47,7 @@ def calculate_dissolved_solids_rating(dissolved_solids):
     """
     if dissolved_solids < 0:
         return 0
-    return dissolved_solids / 2000 * 40
+    return min(abs(dissolved_solids / 2000 * 40), 40)
 
 
 def evaluate_reading(reading):
@@ -70,11 +70,12 @@ def evaluate_reading(reading):
             evaluation += calculate_turbidity_rating(reading[key])
         elif key == "dissolved solids":
             evaluation += calculate_dissolved_solids_rating(reading[key])
-
+        evaluation=abs(evaluation) 
     # generate a color based on the rating
     rgb = [
         int(255 * (1 - evaluation / 100)),
         int(255 * (evaluation / 100)),
         0,
     ]
+
     return rgb

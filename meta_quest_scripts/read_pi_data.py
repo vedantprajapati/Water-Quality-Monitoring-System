@@ -1,4 +1,7 @@
 import serial
+import csv
+import time
+import os
 from utils import timeit
 import random
 from datetime import datetime
@@ -15,6 +18,7 @@ def read_arduino_data(test_read: bool):
     """
     if test_read:
         # return a dictionary of random data for testing
+        time.sleep(0.3)
         return {
             "time": datetime.now(),
             "temperature": random.randint(0, 30),
@@ -43,6 +47,30 @@ def read_arduino_data(test_read: bool):
         return reading
 
 
+def append_to_csv(file_path, data):
+    """Append data to a csv file
+    
+    Args:
+        file_path (str): the path to the csv file
+        data (list): a list of dictionaries of the data to append
+    
+    Returns:
+        a csv file with the data appended
+    """
+
+    if os.path.isfile(file_path) and os.stat(file_path).st_size > 0:
+        # File exists and has data, so just append the new rows
+        with open(file_path, "a", newline="") as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=data[0].keys())
+            writer.writerows(data)
+    else:
+        # File does not exist or is empty, so write the header row and data
+        with open(file_path, "w", newline="") as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=data[0].keys())
+            writer.writeheader()
+            writer.writerows(data)
+
+
 def read_pi_data(test_mode):
     """   
     Read data from the PI server and return a list of dictionaries of the last 5 readings
@@ -57,4 +85,8 @@ def read_pi_data(test_mode):
 
     data = [read_arduino_data(test_mode) for i in range(5)]
     colours = [evaluate_reading(reading) for reading in data]
-    return [{**data[i], 'colour': colours[i]} for i in range(5)]
+    output = [{**data[i], 'colour': colours[i]} for i in range(5)]
+    append_to_csv('monitor_data.csv', output)
+    return output
+
+
