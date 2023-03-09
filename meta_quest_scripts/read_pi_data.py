@@ -1,105 +1,60 @@
 import serial
+from utils import timeit
+import random
 from datetime import datetime
-import math
-import time
+from evaluate_readings import evaluate_reading
 
-# ser = serial.Serial(
-#     "/dev/ttyACM0", 9600
-# )  # Replace '/dev/ttyACM0' with the port where your Arduino is connected
-# ser.flushInput()
+def read_arduino_data(test_read: bool):
+    """read data from the arduino
 
-def calculate_temperature_rating(temperature):
-    # Calculate a rating for the temperature of the water
-    # The rating is a number from 0 to 100 representing the quality of the water with 100 being the best
-    return 100 * math.exp(-1 * ((temperature - 25) ** 2) / 100)
+    Args:
+        test_read (bool): Determines whether to read from the arduino or not
 
-
-def calculate_turbidity_rating(turbidity):
-    # Calculate a rating for the turbidity of the water
-    # The rating is a number from 0 to 100 representing the quality of the water with 100 being the best
-    # 0.5 NTU is the maximum amount of turbidity allowed in drinking water
-    if turbidity < 0:
-        return 0
-    return turbidity / 0.5 * 100
-
-
-def calculate_dissolved_solids_rating(dissolved_solids):
-    # Calculate a rating for the dissolved solids of the water
-    # The rating is a number from 0 to 100 representing the quality of the water with 100 being the best
-    # 1500-2000 mg/L is the maximum amount of dissolved solids allowed in drinking water
-    if dissolved_solids < 0:
-        return 0
-    return dissolved_solids / 2000 * 100
-
-
-def evaluate_reading(reading):
-    # Evaluate a reading and return a dictionary of the evaluation results
-    # The dictionary keys are "time", "temperature", "turbidity", and "dissolved solids"
-
-    # TODO: replace with actual code to evaluate the reading and return a color for the quality of the water (gradient from green to red)
-    evaluation = 0
-    print(reading)
-    for key in reading.keys():
-        if key == "time":
-            continue
-        elif key == "temperature":
-            evaluation += calculate_temperature_rating(reading[key])
-        elif key == "turbidity":
-            evaluation += calculate_turbidity_rating(reading[key])
-        elif key == "dissolved solids":
-            evaluation += calculate_dissolved_solids_rating(reading[key])
-
-    # a number from 0 to 100 representing the quality of the water with 100 being the best
-    evaluated_rating = 100
-
-    # generate a color based on the rating
-    rgb = [
-        int(255 * (1 - evaluated_rating / 100)),
-        int(255 * (evaluated_rating / 100)),
-        0,
-    ]
-    print(rgb)
-    return rgb
-
-def read_arduino_data():
-    # Read data from the Arduino and return a dictionary of the latest readings
-    # The dictionary keys are "time", "temperature", "turbidity", and "dissolved solids"
-
-    # Read data from the Arduino
-    # ser_bytes = ser.readline()
-    # decoded_bytes = ser_bytes.decode("utf-8").rstrip()
-
-    # Parse the data and return a dictionary
-    # values = decoded_bytes.split(",")
-    # reading = {
-    #     "time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-    #     "temperature": float(values[0]),
-    #     "turbidity": float(values[1]),
-    #     "dissolved solids": float(values[2]),
-    # }
-
-    # return
-    
-    return {
+    Returns:
+        _type_: a dictionary of the data read from the arduino
+    """
+    if test_read:
+        # return a dictionary of random data for testing
+        return {
             "time": datetime.now(),
-            "temperature": 0,
-            "turbidity": 0.3,
-            "dissolved solids": 1500,
+            "temperature": random.randint(0, 30),
+            "turbidity": random.randint(0, 1000) / 1000,
+            "dissolved solids": random.randint(0, 3000),
+        }
+    else:
+        ser = serial.Serial(
+            "/dev/ttyACM0", 9600
+        )  # Establish the connection on a specific port
+        ser.flushInput()
+
+        # Read data from the Arduino
+        ser_bytes = ser.readline()
+        decoded_bytes = ser_bytes.decode("utf-8").rstrip()
+
+        # Parse the data and return a dictionary
+        values = decoded_bytes.split(",")
+        reading = {
+            "time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "temperature": float(values[0]),
+            "turbidity": float(values[1]),
+            "dissolved solids": float(values[2]),
         }
 
+        return reading
 
-def read_pi_data():
-    # Read data from the PI server and return a list of dictionaries of the last 5 readings
-    # The dictionary keys are "time", "temperature", "turbidity", and "dissolved solids"
 
-    # TODO: replace with actual code to read data from the PI server
-    data = []
-    for i in range(5):
-        data.append(read_arduino_data())
-        time.sleep(0.25)
+def read_pi_data(test_mode):
+    """   
+    Read data from the PI server and return a list of dictionaries of the last 5 readings
+    The dictionary keys are "time", "temperature", "turbidity", and "dissolved solids"
+
+    Args:
+        test_mode (_type_): whether to read real data or generate random data for testing
+
+    Returns:
+        _type_: a list of dictionaries of the last 5 readings
+    """
+
+    data = [read_arduino_data(test_mode) for i in range(5)]
     colours = [evaluate_reading(reading) for reading in data]
-    for i in range(5):
-        data[i]["colour"] = colours[i]
-    return data
-
-
+    return [{**data[i], 'colour': colours[i]} for i in range(5)]

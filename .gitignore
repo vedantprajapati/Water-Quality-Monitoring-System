@@ -1,0 +1,32 @@
+# Compiled Python files
+__pycache__/
+*.pyc
+
+# Dependency directories
+venv/
+env/
+env_bak/
+
+# Ignore any logs or temporary files
+*.log
+*.pot
+*.pyc
+*.swp
+*.bak
+*.tmp
+
+# Ignore coverage output
+.coverage
+htmlcov/
+
+# Ignore local configuration files
+.env
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore other generated files
+dist/
+build/
+*.egg-info/
+*.egg
