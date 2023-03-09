@@ -64,6 +64,7 @@ def vis_matplotlib():
     ax = fig.add_subplot(111, projection='3d')
 
     # Normalize the color values
+    #TODO: instead of a colourmap, convert the rgb values to a list of floats ranging from 0 to 100 with 100 being red, 0 being green
     normalized_colors = [[c[0]/255, c[1]/255, c[2]/255] for c in colour]
     # Flatten the color values
     flat_colors = [c for sublist in normalized_colors for c in sublist]
