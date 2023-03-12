@@ -8,7 +8,7 @@ def timeit(func):
     func (function): The function to be wrapped with the timeit decorator.
 
     Returns:
-    function: A wrapped function that measures the execution time of the original function and prints it to the console.
+    function: A wrapped function that measures the execution time of the original function and prints it to the console and appends the time it took in seconds to the end of the function's return value.
     """
     @wraps(func)
     def timeit_wrapper(*args, **kwargs):
@@ -21,7 +21,7 @@ def timeit(func):
             print(f'Function {func.__name__} Took {total_time:.4f} seconds')
         else:
             print(f'Function {func.__name__}{args} {kwargs} Took {total_time:.4f} seconds')
-        return result
+        return result, total_time
     return timeit_wrapper
 
 def setup_parser(parser):

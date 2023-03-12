@@ -25,6 +25,7 @@ def draw_octave(temperature, turbidity, dissolved_solids, r, g, b, test_mode):
         )
         print(ret.stdout.decode())
         print(ret.stderr.decode())
+    return draw_command
 
 def vis_octave():
     pass
