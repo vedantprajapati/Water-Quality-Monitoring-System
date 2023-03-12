@@ -34,9 +34,9 @@ def vis_matplotlib():
     # draw the graphs
     fig = plt.figure(figsize=(12, 8))
     draw_scatter(
-        "Temperature",
-        "Turbidity",
-        "Dissolved Solids",
+        "Temperature (C)",
+        "Turbidity (NTU)",
+        "Dissolved Solids ppm",
         temperature_data,
         turbidity_data,
         dissolved_solids_data,
@@ -46,38 +46,38 @@ def vis_matplotlib():
         1,
     )
     draw_scatter(
-        "Temperature",
-        "Turbidity",
-        "Red",
+        "Temperature (C)",
+        "Turbidity (NTU)",
+        "Water Safety Rating",
         temperature_data,
         turbidity_data,
         red,
         "r",
-        "Temperature vs Turbidity vs Red",
+        "Temperature vs Turbidity vs Water Safety Rating",
         fig,
         2,
     )
     draw_scatter(
-        "Temperature",
-        "Dissolved Solids",
-        "Red",
+        "Temperature (C)",
+        "Dissolved Solids (ppm)",
+        "Water Safety Rating",
         temperature_data,
         dissolved_solids_data,
         red,
         "g",
-        "Temperature vs Dissolved Solids vs Red",
+        "Temperature vs Dissolved Solids vs Water Safety Rating",
         fig,
         3,
     )
     draw_scatter(
-        "Turbidity",
-        "Dissolved Solids",
-        "Red",
+        "Turbidity (NTU)",
+        "Dissolved Solids (ppm)",
+        "Water Safety Rating",
         turbidity_data,
         dissolved_solids_data,
         red,
         "b",
-        "Turbidity vs Dissolved Solids vs Red",
+        "Turbidity vs Dissolved Solids vs Water Safety Rating",
         fig,
         4,
     )

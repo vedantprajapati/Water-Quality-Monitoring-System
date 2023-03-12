@@ -59,8 +59,8 @@ def main(test_mode, live_mode):
             elif not test_mode and not live_mode:
                 raise Exception("Please specify a mode: --live or --test")
 
-    print(f"Total number of readings over 5 minutes: {draw_count * 5}")
-    print(f"Total number of draws xxxxover 5 minutes: {draw_count}")
+        print(f"Total number of readings over 5 minutes: {draw_count * 5}")
+        print(f"Total number of draws over 5 minutes: {draw_count}")
 
 
 
