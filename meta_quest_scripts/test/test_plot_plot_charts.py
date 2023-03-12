@@ -1,10 +1,11 @@
-from plot_charts import vis_matplotlib, draw_scatter
+from ..plot_charts import vis_matplotlib, draw_scatter
+from matplotlib import pyplot as plt
 import numpy as np
 
 def get_random_data(size=100):
-    temperature_data = np.random.randing(0,100,size=100)
-    turbidity_data =  np.random.randing(0,100,size=100)
-    dissolved_solids_data = np.random.randing(0,100,size=100)
+    temperature_data = np.random.randint(0,100,size=100)
+    turbidity_data =  np.random.randint(0,100,size=100)
+    dissolved_solids_data = np.random.randint(0,100,size=100)
     red = np.random.randint(0, 255, size=100)
     return temperature_data, turbidity_data, dissolved_solids_data, red
 

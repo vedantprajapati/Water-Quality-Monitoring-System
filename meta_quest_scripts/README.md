@@ -80,3 +80,7 @@ python monitor.py --vm
 #runs the program with imitation values from the arduino
 python monitor.py --test 
 ```
+
+## Testing
+
+To run the test suite, call `python -m pytest` from the meta_quest_scripts directory

@@ -4,8 +4,10 @@ import subprocess
 import argparse
 from plot_charts import vis_matplotlib
 from octave_charts import vis_octave, draw_octave
+from utils import setup_parser
 
 parser = argparse.ArgumentParser()
+setup_parser(parser)
 
 def main(test_mode, live_mode):
     """
@@ -36,10 +38,26 @@ def main(test_mode, live_mode):
                     r=average_readings["colour"][0],
                     g=average_readings["colour"][1],
                     b=average_readings["colour"][2],
-                    test_mode=test_mode,
+                    test_mode= False,
                 )
                 draw_count += 1
                 loop_time = time.time()
+            elif test_mode and time.time() - loop_time > 5:
+                print(f"draw_iteration {draw_count}")
+                print(average_readings)
+                draw_octave(
+                    temperature=average_readings["temperature"],
+                    turbidity=average_readings["turbidity"],
+                    dissolved_solids=average_readings["dissolved solids"],
+                    r=average_readings["colour"][0],
+                    g=average_readings["colour"][1],
+                    b=average_readings["colour"][2],
+                    test_mode= True,
+                )
+                draw_count += 1
+                loop_time = time.time()
+            elif not test_mode and not live_mode:
+                raise Exception("Please specify a mode: --live or --test")
 
     print(f"Total number of readings over 5 minutes: {draw_count * 5}")
     print(f"Total number of draws xxxxover 5 minutes: {draw_count}")

@@ -1,6 +1,6 @@
 from ..evaluate_readings import evaluate_reading
 import random
-import datetime
+from datetime import datetime
 
 def get_random_reading():
         return {
