@@ -1,4 +1,4 @@
-import read_pi_data as rpd
+from read_pi_data import get_average_readings
 import time
 import subprocess
 import argparse
@@ -42,29 +42,8 @@ def main(test_mode, live_mode):
                 loop_time = time.time()
 
     print(f"Total number of readings over 5 minutes: {draw_count * 5}")
-    print(f"Total number of draws over 5 minutes: {draw_count}")
+    print(f"Total number of draws xxxxover 5 minutes: {draw_count}")
 
-
-def get_average_readings(test_mode):
-    """
-    get the average of the last 5 readings
-
-    Args:
-        test_mode (_type_): Determines whether to read from the arduino or not
-
-    Returns:
-        _type_: a dictionary of the average readings
-    """
-    readings = rpd.read_pi_data(test_mode)
-    average_readings = {
-        key: sum(r[key] for r in readings) / 5
-        for key in ["temperature", "turbidity", "dissolved solids"]
-    }
-    average_rgb = [
-        int(sum(int(r["colour"][i]) for r in readings) / 25) for i in range(3)
-    ]
-    average_readings.update({"colour": average_rgb, "time": readings[0]["time"]})
-    return average_readings
 
 
 main(parser.parse_args().test,live_mode=parser.parse_args().live)

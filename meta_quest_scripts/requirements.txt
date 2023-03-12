@@ -1,3 +1,4 @@
 pyserial
 datetime
 numpy
+pytest

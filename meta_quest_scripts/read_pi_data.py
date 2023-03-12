@@ -90,3 +90,24 @@ def read_pi_data(test_mode):
     return output
 
 
+
+def get_average_readings(test_mode):
+    """
+    get the average of the last 5 readings
+
+    Args:
+        test_mode (_type_): Determines whether to read from the arduino or not
+
+    Returns:
+        _type_: a dictionary of the average readings
+    """
+    readings = read_pi_data(test_mode)
+    average_readings = {
+        key: sum(r[key] for r in readings) / 5
+        for key in ["temperature", "turbidity", "dissolved solids"]
+    }
+    average_rgb = [
+        int(sum(int(r["colour"][i]) for r in readings) / 25) for i in range(3)
+    ]
+    average_readings.update({"colour": average_rgb, "time": readings[0]["time"]})
+    return average_readings

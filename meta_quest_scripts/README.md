@@ -63,6 +63,20 @@ To run the code, navigate to the directory where the code is located and execute
 
 This will run the script with default settings. To run the script with different settings, use the following command:
 
-`python monitor.py --test --live --vo --vm`.
+`python monitor.py --[MODE]`.
 
 The script will output the number of readings and the number of draws over 5 minutes.
+
+```bash 
+#runs the program with the AR HUD enabled. A CSV file named monitor_data.csv will be populated with data
+python monitor.py --live 
+
+#runs the program in open brush visualization mode. The data from monitor_data.csv will be plotted in Openbrush
+python monitor.py --vo 
+
+#runs the program in matplotlib visualization mode. The data from monitor_data.csv will be plotted in Matplotlib on the connected display
+python monitor.py --vm 
+
+#runs the program with imitation values from the arduino
+python monitor.py --test 
+```
