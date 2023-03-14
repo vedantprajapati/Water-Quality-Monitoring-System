@@ -23,6 +23,8 @@ def main(test_mode, live_mode):
         vis_octave()
     elif parser.parse_args().vm:
         vis_matplotlib()
+    elif parser.parse_args().testdraw:
+        print('hi')
     else:
         while time.time() - start_time < 300:  # run for 5 minutes
             average_readings = get_average_readings(test_mode)

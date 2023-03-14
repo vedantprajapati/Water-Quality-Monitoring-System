@@ -31,6 +31,11 @@ def setup_parser(parser):
         action="store_true",
     )
     parser.add_argument(
+        "--testdraw",
+        help="test the script without reading from the arduino",
+        action="store_true",
+    )
+    parser.add_argument(
         "--live",
         help="draw the square in octave",
         action="store_true",
