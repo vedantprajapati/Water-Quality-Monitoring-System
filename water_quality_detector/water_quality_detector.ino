@@ -74,12 +74,7 @@ void loop()
   
 
   
-  Serial.print("Temperature: ");
-  Serial.print(tempCelsius);    // print the temperature in Celsius
-  Serial.print("°C");
-  Serial.print("  ~  ");        // separator between Celsius and Fahrenheit
-  Serial.print(tempFahrenheit); // print the temperature in Fahrenheit
-  Serial.println("°F");
+
 
   //MEASURE TURBIDITY SENSOR
   // read the input on analog pin 0:
@@ -88,7 +83,7 @@ void loop()
   float ntu;
   volt = ((float)analogRead(A0) / 1023 * 5);
   ntu = -1120.4 * square(volt) + 5742.3 * volt - 4353.8;
-  Serial.print("Turbidity Sensor NTU: ");
+
 
 
   //DISSOLVED SOLIDS SENSOR
@@ -127,24 +122,22 @@ void loop()
   round_to_dp(tempCelsius,1);
   lcd.print(int(tempCelsius));    // print the temperature in Celsius
   
-  Serial.print("Total Dissolved Solids: ");
-  Serial.print("voltage:");
-  Serial.print(averageVoltage, 2);
-  Serial.print("V   ");
-  Serial.print("TDS Value:");
   round_to_dp(tdsValue, 2);
-  Serial.print(tdsValue, 0);
-  Serial.println("ppm");
+  Serial.print(tempCelsius);    // print the temperature in Celsius
+  Serial.print(",");
+  //NTU
+  Serial.print(ntu);
+  Serial.print(",");
+  Serial.print(tdsValue);
+  Serial.print("\n");
   lcd.print(",TDS:");
   lcd.print(tdsValue);
   lcd.setCursor(0,1);
  
-  Serial.println(ntu);
   lcd.print("NTU:");
   lcd.print(ntu);
   lcd.setCursor(0,0);
 
-  delay(500);
 }
 
 float round_to_dp( float in_value, int decimal_place )
