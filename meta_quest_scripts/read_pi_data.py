@@ -16,6 +16,11 @@ def read_arduino_data(test_read: bool):
     Returns:
         _type_: a dictionary of the data read from the arduino
     """
+    
+    ser = serial.Serial(
+            "/dev/ttyACM0", 115200
+        )  # Establish the connection on a specific port
+        
     if test_read:
         # return a dictionary of random data for testing
         time.sleep(0.3)
@@ -26,9 +31,9 @@ def read_arduino_data(test_read: bool):
             "dissolved solids": random.randint(0, 3000),
         }
     else:
-        ser = serial.Serial(
-            "/dev/ttyACM0", 9600
-        )  # Establish the connection on a specific port
+        while (ser.in_waiting <= 0):
+            time.sleep(0.03)
+        
         ser.flushInput()
 
         # Read data from the Arduino
@@ -37,8 +42,9 @@ def read_arduino_data(test_read: bool):
 
         # Parse the data and return a dictionary
         values = decoded_bytes.split(",")
+        print(values)
         reading = {
-            "time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "temperature": float(values[0]),
             "turbidity": float(values[1]),
             "dissolved solids": float(values[2]),
