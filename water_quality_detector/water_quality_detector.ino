@@ -98,7 +98,7 @@ void loop()
   }
 
   static unsigned long printTimepoint = millis();
-  if (millis() - printTimepoint > 800U) {
+  if (millis() - printTimepoint > 40U) {
     printTimepoint = millis();
     for (copyIndex = 0; copyIndex < SCOUNT; copyIndex++) {
       analogBufferTemp[copyIndex] = analogBuffer[copyIndex];
