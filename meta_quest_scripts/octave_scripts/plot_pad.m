@@ -3,8 +3,8 @@ system("sendcom new")
 % example command
 % octave-cli plot_pad.m 1 2 3 255 255 255
 temp = argv(){1}
-ds = argv(){2}
-turb = argv(){3}
+ds = argv(){3}
+turb = argv(){2}
 system(sprintf("sendcom color.set.rgb=""%s,%s,%s"""))
 system("sendcom color.set.rgb=""255,255,255""")
 system(sprintf("sendcom brush.move.to=""0,18,12"""))
