@@ -27,10 +27,10 @@ def main(test_mode, live_mode):
         print('hi')
     else:
         while time.time() - start_time < 300:  # run for 5 minutes
-            average_readings = get_average_readings(test_mode)
 
             # call bash script to draw square with color based on average_readings in octave underneath the user's feet
             if live_mode and time.time() - loop_time > 5:
+                average_readings = get_average_readings(test_mode)
                 print(f"draw_iteration {draw_count}")
                 print(average_readings)
                 draw_octave(

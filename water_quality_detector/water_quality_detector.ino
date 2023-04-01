@@ -82,7 +82,8 @@ void loop()
   float volt;
   float ntu;
   volt = ((float)analogRead(A0) / 1023 * 5);
-  ntu = -1120.4 * square(volt) + 5742.3 * volt - 4353.8;
+  ntu = (-83 * volt + 5)*1000*0.13
+  // ntu = -1120.4 * square(volt) + 5742.3 * volt - 4353.8;
 
 
 

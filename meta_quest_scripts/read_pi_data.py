@@ -31,17 +31,26 @@ def read_arduino_data(test_read: bool):
             "dissolved solids": random.randint(0, 3000),
         }
     else:
-        while (ser.in_waiting <= 0):
-            time.sleep(0.03)
+        values =[]
+        ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
+
+        ser.reset_input_buffer()
+
+        while len(values)<20:
+            if ser.in_waiting > 0:
+                line = ser.readline().decode('utf-8').rstrip()
+                val = line.split(",")
+                if len(val)==3 and all([len(i)>0 for i in val]):
+                    values.append(val)
+                
+        sum_temp,sum_turb,max_tds = 0, 0, 0
+        for value in values:
+            sum_temp += float(value[0])
+            sum_turb += float(value[1])
+            max_tds = float(value[2]) if max_tds<float(value[2]) else max_tds
         
-        ser.flushInput()
-
+        values = [sum_temp/20, sum_turb/20, max_tds]
         # Read data from the Arduino
-        ser_bytes = ser.readline()
-        decoded_bytes = ser_bytes.decode("utf-8").rstrip()
-
-        # Parse the data and return a dictionary
-        values = decoded_bytes.split(",")
         print(values)
         reading = {
             "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -63,18 +72,18 @@ def append_to_csv(file_path, data):
     Returns:
         a csv file with the data appended
     """
-
+    print(data)
     if os.path.isfile(file_path) and os.stat(file_path).st_size > 0:
         # File exists and has data, so just append the new rows
         with open(file_path, "a", newline="") as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=data[0].keys())
-            writer.writerows(data)
+            writer = csv.DictWriter(csvfile, fieldnames=data.keys())
+            writer.writerow(data)
     else:
         # File does not exist or is empty, so write the header row and data
         with open(file_path, "w", newline="") as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=data[0].keys())
+            writer = csv.DictWriter(csvfile, fieldnames=data.keys())
             writer.writeheader()
-            writer.writerows(data)
+            writer.writerow(data)
 
 
 def read_pi_data(test_mode):
@@ -89,9 +98,9 @@ def read_pi_data(test_mode):
         _type_: a list of dictionaries of the last 5 readings
     """
 
-    data = [read_arduino_data(test_mode) for i in range(5)]
-    colours = [evaluate_reading(reading) for reading in data]
-    output = [{**data[i], 'colour': colours[i]} for i in range(5)]
+    data = read_arduino_data(test_mode)
+    colours = evaluate_reading(data)
+    output = {**data, 'colour': colours}
     append_to_csv('monitor_data.csv', output)
     return output
 
@@ -107,13 +116,16 @@ def get_average_readings(test_mode):
     Returns:
         _type_: a dictionary of the average readings
     """
+    #no longer getting average here because it is very slow
     readings = read_pi_data(test_mode)
-    average_readings = {
-        key: sum(r[key] for r in readings) / 5
-        for key in ["temperature", "turbidity", "dissolved solids"]
-    }
-    average_rgb = [
-        int(sum(int(r["colour"][i]) for r in readings) / 25) for i in range(3)
-    ]
-    average_readings.update({"colour": average_rgb, "time": readings[0]["time"]})
-    return average_readings
+    print(readings)
+    # print(readings)
+    # average_readings = {
+    #     key: sum(r[key] for r in readings) / 5
+    #     for key in ["temperature", "turbidity", "dissolved solids"]
+    # }
+    # average_rgb = [
+    #     int(sum(int(r["colour"][i]) for r in readings) / 25) for i in range(3)
+    # ]
+    # average_readings.update({"colour": average_rgb, "time": readings[0]["time"]})
+    return readings

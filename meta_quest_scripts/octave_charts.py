@@ -23,8 +23,9 @@ def draw_octave(temperature, turbidity, dissolved_solids, r, g, b, test_mode):
     ret = subprocess.run(
         draw_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True
     )
-    print(ret.stdout.decode())
-    print(ret.stderr.decode())
+    
+    # print(ret.stdout.decode())
+    # print(ret.stderr.decode())p
     return draw_command
 
 def vis_octave():
