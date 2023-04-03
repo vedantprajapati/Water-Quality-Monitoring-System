@@ -19,5 +19,5 @@ system("sendcom color.rgb=1.0,0.0,0.5");
 system("sendcom user.move.to=-7,10,10")
 
 for i = 1:len_M
-  system(sprintf("sendcom draw.path=[%d,%d,0],[%d,%d,0]",i+X_OFFSET,M(i)+Y_OFFSET,i+1+X_OFFSET, M(i)+1+Y_OFFSET));
+  system(sprintf("sendcom draw.path=[%d,%d,0],[%d,%d,0]",i*0.1+X_OFFSET,M(i)-865,i*0.1+X_OFFSET+0.1, M(i)-865));
 end
